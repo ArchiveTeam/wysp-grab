@@ -13,7 +13,7 @@ module.get_urls = function(file, url, is_css, iri)
     if get_body():match('sapImage') then -- Only image posts
         queue_request({url=get_body():match('<img class="sapImage" src="(https?://%S-)"')}, retry_common.only_retry_handler(5, {200}), false)
         -- Also the "full size" image
-        local full_size = get_body():match('<a href="(https://wyspstore2%.s3%.amazonaws%.com/.-)" class="theaterStatlineLink" target="_blank">Full size</a>')
+        local full_size = get_body():match('<a href="(https?://%S-)" class="theaterStatlineLink" target="_blank">Full size</a>')
         queue_request({url=full_size}, retry_common.only_retry_handler(5, {200}), false)
     end
     local id = url:match("^https?://www%.wysp.ws/post/(%d+)/")
