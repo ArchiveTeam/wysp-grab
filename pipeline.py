@@ -60,9 +60,9 @@ if not WGET_AT:
 # It will be added to the WARC files and reported to the tracker.
 VERSION = '20230628.01'
 USER_AGENT = 'Mozilla/5.0 (Incompatible; Archiveteam (https://wiki.archiveteam.org/; communicate at https://webirc.hackint.org/#ircs://irc.hackint.org/#archiveteam)'
-TRACKER_ID = 'egloos'
+TRACKER_ID = 'wysp'
 TRACKER_HOST = 'legacy-api.arpa.li'
-MULTI_ITEM_SIZE = 25000
+MULTI_ITEM_SIZE = 44
 
 
 ###########################################################################
@@ -192,10 +192,10 @@ class WgetArgs(object):
             WGET_AT,
             '-U', USER_AGENT,
             '-nv',
-            # '--host-lookups', 'dns',
-            # '--hosts-file', '/dev/null',
-            # '--resolvconf-file', '/dev/null',
-            # '--dns-servers', '9.9.9.10,149.112.112.10,2620:fe::10,2620:fe::fe:10',
+            '--host-lookups', 'dns',
+            '--hosts-file', '/dev/null',
+            '--resolvconf-file', '/dev/null',
+            '--dns-servers', '9.9.9.10,149.112.112.10,2620:fe::10,2620:fe::fe:10',
             '--content-on-error',
             '--load-cookies', 'cookies.txt',
             '--lua-script', 'Framework/main.lua',
@@ -254,19 +254,19 @@ class WgetArgs(object):
 # This will be shown in the warrior management panel. The logo should not
 # be too big. The deadline is optional.
 project = Project(
-    title = 'egloos',
+    title = 'wysp',
     project_html = '''
-    <img class="project-logo" alt="logo" src="https://wiki.archiveteam.org/images/3/37/Egloos_logo.gif" height="50px"/>
-    <h2>Egloos <span class="links"><a href="http://egloos.com/">Website</a> &middot; <a href="http://tracker.archiveteam.org/egloos/">Leaderboard</a></span></h2>
+    <img class="project-logo" alt="logo" src="https://wiki.archiveteam.org/images/3/3b/Wysp-logo-landing.png" height="50px"/>
+    <h2>Wysp <span class="links"><a href="https://wysp.ws/">Website</a> &middot; <a href="http://tracker.archiveteam.org/wysp/">Leaderboard</a></span></h2>
     ''',
-    utc_deadline = datetime.datetime(2023,6,15, 15,0,0)) # Midnight Seoul
+    utc_deadline = datetime.datetime(2023,8,1, 0,0,0))
 
 pipeline = Pipeline(
     CheckIP(),
     GetItemFromTracker('http://{}/{}/multi={}/'
         .format(TRACKER_HOST, TRACKER_ID, MULTI_ITEM_SIZE),
         downloader, VERSION),
-    PrepareDirectories(warc_prefix='egloos'),
+    PrepareDirectories(warc_prefix='wysp'),
     WgetDownload(
         WgetArgs(),
         max_tries=1,
