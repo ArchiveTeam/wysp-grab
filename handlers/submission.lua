@@ -16,9 +16,13 @@ module.get_urls = function(file, url, is_css, iri)
         local full_size = get_body():match('<a href="(https?://%S-)" class="theaterStatlineLink" target="_blank">Full size</a>')
         queue_request({url=full_size}, retry_common.only_retry_handler(5, {200}), false)
     end
+
     local id = url:match("^https?://www%.wysp.ws/post/(%d+)/")
     queue_request({url="https://www.wysp.ws/comments/box/?url=/post/" .. id .. "/&rg=20&order=antichronological", first_page=true}, "comments", false)
 
+    local author = get_body():match('<a class="sapAuthorUrl" href="/(%S-)/">')
+    queue_request({url="https://wysp.ws" .. author}, "user", true)
+    
     -- The expand line will not be sent by the server if the UA begins with "arch", case-insensitive.
     if get_body():match('<a href="#" class="viewBookmarks"') then
         queue_request({url="https://www.wysp.ws/timeline/bookmarks/?pid=" .. id .. "&card=1"}, "bookmarks", false)
