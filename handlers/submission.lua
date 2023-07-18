@@ -20,7 +20,8 @@ module.get_urls = function(file, url, is_css, iri)
     local id = url:match("^https?://www%.wysp.ws/post/(%d+)/")
     queue_request({url="https://www.wysp.ws/comments/box/?url=/post/" .. id .. "/&rg=20&order=antichronological", first_page=true}, "comments", false)
 
-    local author = get_body():match('<a class="sapAuthorUrl" href="/(%S-)/">')
+    local author = get_body():match('<a class="sapAuthorUrl" href="(%S-)">')
+    assert(author:match('/[^/"]+/') or author:match('/profile/%d+/'))
     queue_request({url="https://wysp.ws" .. author}, "user", true)
     
     -- The expand line will not be sent by the server if the UA begins with "arch", case-insensitive.
