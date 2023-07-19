@@ -1,5 +1,7 @@
 --require "strict"
 
+require "Lib/table_show"
+
 
 local module = {}
 
@@ -14,6 +16,19 @@ queue_request = function(options_table, handler, backfeed)
     if handler == "user" and backfeed then
         opts.url = opts.url:lower()
     end
+    
+    if opts.url:match('^https?://wysp%.ws/') then
+        assert(not backfeed) -- This should only handle items coming directly in from the tracker
+        print("Diverting " .. opts.url)
+        opts.url = opts.url:gsub('^https?://wysp%.ws/', 'https://www.wysp.ws/')
+        queue_request(opts, handler, true)
+        return
+    end
+    
+    assert(not (opts.url:match('^https?://www%.wysp.ws/post/%d+$') or opts.url:match('^https?://www%.wysp.ws/[^/%?]+$')))
+    
+    
+    
     -- Auth cookies on gallery pages, follower discovery, and user pages (cosmetic, as these more closely
     --  reflect the experience of an authed user by showing NSFW)
     if (handler == "gallery"
@@ -23,6 +38,11 @@ queue_request = function(options_table, handler, backfeed)
             opts.headers = {}
         end
         opts.headers.Cookie = "session=eyJ1aWQiOjU5NzU0MDE4NDU3NTE4MDh9|1689164164|c1d9c1b2180b0b354ceba74f46f00f692788ae94"
+    end
+    
+    if not opts.url then
+        print(debug.traceback())
+        print(table.show(opts))
     end
 
     -- E.g. entry on the followers of https://www.wysp.ws/panema/
