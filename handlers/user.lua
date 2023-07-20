@@ -9,6 +9,10 @@ module.get_urls = function(file, url, is_css, iri)
         assert(get_body():match("Page not found"))
         return
     end
+    
+    if get_body():match('<div class="textContent">%s*This user was banned from Wysp%. Nothing to see here%.') then
+        return
+    end
 
     -- All Wysp users have a numerical ID (though sadly they appear to be non-contiguous); not all have a slug name
     -- If this is a numerical page, try guessing the slug - if this succeeds, it will get duplicate data,
