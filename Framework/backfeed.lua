@@ -67,7 +67,9 @@ module.queue_request_for_upload = function(handler, params_serialized)
 end
 
 module.queue_external_url_for_upload = function(url)
-  external_urls_queue[url] = true
+  if url:match(":") then
+    external_urls_queue[url] = true
+  end
 end
 
 return module
