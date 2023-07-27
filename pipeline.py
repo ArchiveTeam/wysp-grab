@@ -41,7 +41,8 @@ if StrictVersion(seesaw.__version__) < StrictVersion('0.8.5'):
 WGET_AT = find_executable(
     'Wget+AT',
     [
-        'GNU Wget 1.21.3-at.20230605.01'
+        'GNU Wget 1.21.3-at.20230605.01',
+        'GNU Wget 1.21.3-at.20230623.01'
     ],
     [
         './wget-at',
@@ -58,11 +59,13 @@ if not WGET_AT:
 #
 # Update this each time you make a non-cosmetic change.
 # It will be added to the WARC files and reported to the tracker.
-VERSION = '20230722.01'
+VERSION = '20230727.01'
 USER_AGENT = 'Mozilla/5.0 (Incompatible; Archiveteam (https://wiki.archiveteam.org/; communicate at https://webirc.hackint.org/#ircs://irc.hackint.org/#archiveteam)'
 TRACKER_ID = 'wysp'
 TRACKER_HOST = 'legacy-api.arpa.li'
 MULTI_ITEM_SIZE = 44
+PROJECT_BACKFEED_KEY = 'wysp-qzjkrxpuzjub4dmm'
+URLS_BACKFEED_KEY = 'urls-op991cap2s2amz92'
 
 
 ###########################################################################
@@ -274,7 +277,9 @@ pipeline = Pipeline(
         env={
             'item_dir': ItemValue('item_dir'),
             'warc_file_base': ItemValue('warc_file_base'),
-            'initial_requests': ItemValue('initial_requests')
+            'initial_requests': ItemValue('initial_requests'),
+            'project_backfeed_key': PROJECT_BACKFEED_KEY,
+            'urls_backfeed_key': URLS_BACKFEED_KEY
         }
     ),
     PrepareStatsForTracker(

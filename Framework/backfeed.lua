@@ -27,6 +27,7 @@ end
 
 -- Taken verbatim from previous projects I've done'
 local queue_list_to = function(list, key)
+  assert(key)
   if do_debug then
     for item, _ in pairs(list) do
       print("Would have sent discovered item " .. item .. " to " .. key)
@@ -55,8 +56,8 @@ local queue_list_to = function(list, key)
 end
 
 module.upload = function()
-  queue_list_to(queue, "wysp-qzjkrxpuzjub4dmm")
-  queue_list_to(external_urls_queue, "urls-op991cap2s2amz92")
+  queue_list_to(queue, os.getenv('project_backfeed_key'))
+  queue_list_to(external_urls_queue, os.getenv('urls_backfeed_key'))
   queue_list_to(queue_egloos, "egloos-8o5ibt0t8fnr0wr6")
   queue = {}
   external_urls_queue = {}

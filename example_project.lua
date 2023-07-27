@@ -15,7 +15,7 @@ _ = nil
 local old_queue_request = queue_request
 queue_request = function(options_table, handler, backfeed)
     -- Mistakenly sent Egloos items here
-    if handler:match("^api_.*") or handler == "resources" then
+    if type(handler) == "string" and handler:match("^api_.*") or handler == "resources" then
         backfeed_l.queue_for_sending_back_to_egloos(handler, queue_item_utils.serialize_request_options(options_table))
         return
     end
