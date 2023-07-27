@@ -1,6 +1,8 @@
 --require "strict"
 
 require "Lib/table_show"
+local backfeed_l = require "Framework/backfeed"
+local queue_item_utils = require "Framework/queue_item"
 
 
 local module = {}
@@ -12,6 +14,12 @@ _ = nil
 
 local old_queue_request = queue_request
 queue_request = function(options_table, handler, backfeed)
+    -- Mistakenly sent Egloos items here
+    if handler:match("^api_.*") or handler == "resources" then
+        backfeed_l.queue_for_sending_back_to_egloos(handler, queue_item_utils.serialize_request_options(options_table))
+        return
+    end
+
     local opts = deep_copy(options_table)
     if handler == "user" and backfeed then
         opts.url = opts.url:lower()

@@ -4,6 +4,7 @@ local module = {}
 
 local queue = {}
 local external_urls_queue = {}
+local queue_egloos = {}
 
 local send_binary = function(to_send, key)
   local tries = 0
@@ -28,7 +29,7 @@ end
 local queue_list_to = function(list, key)
   if do_debug then
     for item, _ in pairs(list) do
-      print("Would have sent discovered item " .. item)
+      print("Would have sent discovered item " .. item .. " to " .. key)
     end
   else
     local to_send = nil
@@ -56,8 +57,10 @@ end
 module.upload = function()
   queue_list_to(queue, "wysp-qzjkrxpuzjub4dmm")
   queue_list_to(external_urls_queue, "urls-op991cap2s2amz92")
+  queue_list_to(queue_egloos, "egloos-8o5ibt0t8fnr0wr6")
   queue = {}
   external_urls_queue = {}
+  queue_egloos = {}
 end
 
 module.queue_request_for_upload = function(handler, params_serialized)
@@ -70,6 +73,12 @@ module.queue_external_url_for_upload = function(url)
   if url:match(":") then
     external_urls_queue[url] = true
   end
+end
+
+module.queue_for_sending_back_to_egloos = function(handler, params_serialized)
+  assert(type(handler) == "string")
+  assert(type("params_serialized" == "string"))
+  queue_egloos[handler .. ":" .. params_serialized] = true
 end
 
 return module
