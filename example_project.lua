@@ -19,6 +19,23 @@ queue_request = function(options_table, handler, backfeed)
         backfeed_l.queue_for_sending_back_to_egloos(handler, queue_item_utils.serialize_request_options(options_table))
         return
     end
+    
+    -- Non-users
+    local user = options_table.url:match('^https?://www%.wysp%.ws/([^/%?]+)/$')
+    if handler == "user" and
+        user == "faq"
+        or user == "feedback"
+        or user == "friends"
+        or user == "landing"
+        or user == "practice"
+        or user == "login"
+        or user == "register"
+        or user == "about"
+        or user == "terms"
+        or user == "connect"
+        or user == "inspiration" then
+        return
+    end
 
     local opts = deep_copy(options_table)
     if handler == "user" and backfeed then
