@@ -2,7 +2,12 @@ local module = {}
 local retry_common = require("Lib/retry_common")
 local JSON = require 'Lib/JSON'
 
+local sc
+
 module.get_urls = function(file, url, is_css, iri)
+    if sc == 500 then
+        return
+    end
     ---@type table<string, string>
     local json = JSON:decode(get_body())
     if json["html"] then
@@ -30,7 +35,8 @@ module.get_urls = function(file, url, is_css, iri)
 end
 
 module.take_subsequent_actions = function(url, http_stat)
-    if http_stat["statcode"] == 200 then
+    sc = http_stat["statcode"]
+    if sc == 200 or sc == 500 then
         return true
     else
         retry_common.retry_unless_hit_iters(5, false)
