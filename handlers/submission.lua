@@ -11,7 +11,7 @@ module.get_urls = function(file, url, is_css, iri)
     end
     -- Queue the image URL
     if get_body():match('sapImage') then -- Only image posts
-        queue_request({url=get_body():match('<img class="sapImage" src="(https?://[^\n"<>]-)"')}, retry_common.only_retry_handler(5, {200}), false)
+        queue_request({url=get_body():match('<img class="sapImage" src="(https?://[^\n"<>]-)"')}, retry_common.only_retry_handler(5, {200, 403}), false)
         -- Also the "full size" image
         local full_size = get_body():match('<a href="(https?://[^\n]-)" class="theaterStatlineLink" target="_blank">Full size</a>')
         queue_request({url=full_size}, retry_common.only_retry_handler(5, {200}), false)

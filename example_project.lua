@@ -20,6 +20,11 @@ queue_request = function(options_table, handler, backfeed)
         return
     end
     
+    -- Weird stuff
+    if options_table.url:match('^https?://static/') then
+        return
+    end
+    
     -- Non-users
     local user = options_table.url:match('^https?://www%.wysp%.ws/([^/%?]+)/$')
     if handler == "user" and
@@ -33,7 +38,12 @@ queue_request = function(options_table, handler, backfeed)
         or user == "about"
         or user == "terms"
         or user == "connect"
-        or user == "inspiration" then
+        or user == "inspiration"
+        or user == "submit"
+        or user == "wysp-feedback"
+        or user == "logout"
+        or user == "static"
+        or (user and user:match("&")) then
         return
     end
 
