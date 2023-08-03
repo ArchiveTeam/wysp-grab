@@ -21,7 +21,9 @@ queue_request = function(options_table, handler, backfeed)
     end
     
     -- Weird stuff
-    if options_table.url:match('^https?://static/') then
+    if options_table.url:match('^https?://static/')
+        or options_table.url:match('^https?://www%.wysp.ws/[^/%?]+&$')
+        or options_table.url:match('^https?://www%.wysp.ws//$') then
         return
     end
     
@@ -43,6 +45,8 @@ queue_request = function(options_table, handler, backfeed)
         or user == "wysp-feedback"
         or user == "logout"
         or user == "static"
+        or user == "search"
+        or user == "messages"
         or (user and user:match("&")) then
         return
     end
